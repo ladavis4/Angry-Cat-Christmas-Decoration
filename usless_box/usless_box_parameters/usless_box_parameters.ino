@@ -12,7 +12,7 @@ int arm_pos2 = 95;
 int lid_pos1 = 122;
 int lid_pos2 = 160;
 
-int move_number = 5; //Keeps track of the number of movements completed by the box since turning on
+int move_number = 0; //Keeps track of the number of movements completed by the box since turning on
 
 void setup() {
   Serial.begin(9600);           //  setup serial
