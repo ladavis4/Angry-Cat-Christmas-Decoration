@@ -8,9 +8,9 @@ int switch_pin = A5; // potentiometer wiper (middle terminal) connected to analo
 int switch_voltage = 0;  // variable to store the value read
 
 float arm_pos1 = 180;
-int arm_pos2 = 95;
+int arm_pos2 = 85;
 int lid_pos1 = 122;
-int lid_pos2 = 160;
+int lid_pos2 = 170;
 
 int move_number = 0; //Keeps track of the number of movements completed by the box since turning on
 
@@ -50,7 +50,7 @@ void pick_movement() {
   //normal speed = .5
   //max speed = 3
   //
-  if (move_number > 5) {
+  if (move_number > 7 ) {
     move_number = 0;  //Loop through every possible move
   }
   
@@ -112,15 +112,44 @@ void pick_movement() {
   else if (move_number == 5) {
     //lid bounces then arm hits
     int lid_pos3 = lid_pos1 + 20; 
-    int steps = 14;   
-    float lid_des_pos_a[steps] = {lid_pos3, lid_pos1, lid_pos3, lid_pos1, lid_pos3, lid_pos1,lid_pos3, lid_pos1, lid_pos3, lid_pos1, lid_pos2, lid_pos2, lid_pos2, lid_pos1};
-    float lid_des_speed_a[steps] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, .01, .01, 2};
-    float arm_des_pos_a[steps] = {arm_pos1, arm_pos1, arm_pos1, arm_pos1,arm_pos1, arm_pos1,arm_pos1, arm_pos1,arm_pos1, arm_pos1, arm_pos2, arm_pos2, arm_pos1, arm_pos1};
-    float arm_des_speed_a[steps] = {.01, .01,.01, .01,.01, .01,.01, .01,.01, .01, 1.2, .01, 1.2, .01};
-    float delay_a[steps] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0};
+    int steps = 15;   
+    float lid_des_pos_a[steps] = {lid_pos3, lid_pos1, lid_pos3, lid_pos1, lid_pos3, lid_pos1,lid_pos3, lid_pos1, lid_pos3, lid_pos1, lid_pos1, lid_pos2, lid_pos2, lid_pos2, lid_pos1};
+    float lid_des_speed_a[steps] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, .01, 2, .01, .01, 2};
+    float arm_des_pos_a[steps] = {arm_pos1, arm_pos1, arm_pos1, arm_pos1,arm_pos1, arm_pos1,arm_pos1, arm_pos1,arm_pos1, arm_pos1,arm_pos1, arm_pos2, arm_pos2, arm_pos1, arm_pos1};
+    float arm_des_speed_a[steps] = {.01, .01,.01, .01,.01, .01,.01, .01,.01, .01, .01, 1.2, .01, 1.2, .01};
+    float delay_a[steps] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 0};
     delay(2000);
     servo_movements(lid_des_pos_a, lid_des_speed_a, arm_des_pos_a, arm_des_speed_a, delay_a, steps);
   }
+  else if (move_number == 6){
+    //Hold switch lid hits the arm
+    int steps = 14;   
+    float lid_des_pos_a[steps] = {lid_pos2, lid_pos2, lid_pos2, lid_pos1, lid_pos2, lid_pos1, lid_pos2, lid_pos1, lid_pos2, lid_pos1, lid_pos2, lid_pos1, lid_pos2, lid_pos1};
+    float lid_des_speed_a[steps] = {5, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2};
+    float arm_des_pos_a[steps] = {arm_pos1, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos2, arm_pos1, arm_pos1};
+    float arm_des_speed_a[steps] = {.01, 2,.01, .01,.01, .01,.01, .01,.01, .01, 1.2, .01, 2, .01};
+    float delay_a[steps] = {0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0};
+    delay(2000);
+    servo_movements(lid_des_pos_a, lid_des_speed_a, arm_des_pos_a, arm_des_speed_a, delay_a, steps); 
+  }
+
+  else if (move_number == 7){
+    //Open small, close, open small, close, open full hit fast]
+    int lid_pos3 = 155;
+    int steps = 13;   
+    float lid_des_pos_a[steps] = {lid_pos3, lid_pos3, lid_pos1, lid_pos1,  lid_pos3, lid_pos3, lid_pos1, lid_pos1, lid_pos2, lid_pos2, lid_pos2, lid_pos2, lid_pos1};
+    float lid_des_speed_a[steps] = {.5,       .01,      .5,      .1,         .5,     .01,       .5,     .05,        5,      .05,       .05,          .05,      5};
+    float arm_des_pos_a[steps] = {arm_pos1, arm_pos1, arm_pos1,  arm_pos1, arm_pos1, arm_pos1, arm_pos1, arm_pos1, arm_pos1, arm_pos2, arm_pos2, arm_pos1, arm_pos1};
+    float arm_des_speed_a[steps] = {.01,    .01,        .01,    .01,         .01,      .01,     .01,       .01,      .01,     2,     .1,          2,    .01};
+    float delay_a[steps] = {0, 1.5, 0, 1.5, 0, 1.5, 0, 2, 0, 0, .3, 0, 0};
+    delay(2000);
+    servo_movements(lid_des_pos_a, lid_des_speed_a, arm_des_pos_a, arm_des_speed_a, delay_a, steps);
+    
+  }
+
+
+
+  
   move_number += 1;         //swith to next move
 }
 
