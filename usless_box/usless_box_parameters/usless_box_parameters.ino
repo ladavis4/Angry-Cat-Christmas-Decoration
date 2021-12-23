@@ -37,14 +37,6 @@ void loop() {
     arm_servo.write(arm_pos1);
   }
 }
-
-
-
-
-
-
-
-
 void pick_movement() {
   //slow speed = .1
   //normal speed = .5
@@ -123,18 +115,6 @@ void pick_movement() {
   }
   move_number += 1;         //swith to next move
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 void servo_movements(float lid_des_pos_a[], float lid_des_speed_a[], float arm_des_pos_a[], float arm_des_speed_a[], float delay_a[], int steps) {
   for (int i = 0; i < steps; i++) {
