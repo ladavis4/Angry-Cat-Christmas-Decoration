@@ -1,12 +1,22 @@
-#include <Servo.h>
-Servo lid_servo;  // create servo object to control a servo
+/* usless_box_main.ino
+ * Lenny Davis
+ * Last updated 12/22/21
+ * Merry Christmas!
+ */
+
+#include <ESP32Servo.h>
+
+//Declare servo pins 
 Servo arm_servo;
-// twelve servo objects can be created on most boards
+static int arm_servo_pin = 23; 
+Servo lid_servo; 
+static int lid_servo_pin = 18; 
 
-int pos = 0;    // variable to store the servo position
-int switch_pin = A5; // potentiometer wiper (middle terminal) connected to analog pin 3              // outside leads to ground and +5V
-int switch_voltage = 0;  // variable to store the value read
+//Declare switch
+int switch_pin = 10;
+int switch_val; 
 
+//Declare max and min positions for the servos
 float arm_pos1 = 180;
 int arm_pos2 = 85;
 int lid_pos1 = 122;
@@ -14,29 +24,41 @@ int lid_pos2 = 170;
 
 int move_number = 0; //Keeps track of the number of movements completed by the box since turning on
 
+//Start PWM 
+ESP32PWM pwm;
+
 void setup() {
-  Serial.begin(9600);           //  setup serial
-  arm_servo.attach(9);
-  lid_servo.attach(3);
+  // Allow allocation of all timers
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  arm_servo.setPeriodHertz(50);      // Standard 50hz servo
+  lid_servo.setPeriodHertz(50);      // Standard 50hz servo
+  Serial.begin(115200);
+  arm_servo.attach(arm_servo_pin, 500, 2500); //max and min us
+  lid_servo.attach(lid_servo_pin, 500, 2500); //max and min us
 
   arm_servo.write(arm_pos1);           //set door to hiding position
   lid_servo.write(lid_pos1);
+
+  pinMode(switch_pin, INPUT_PULLUP);
 }
 
 void loop() {
-  switch_voltage = analogRead(switch_pin);  // read the input pin
-  Serial.println(switch_voltage);
+  switch_val = digitalRead(switch_pin);  // read the input pin
+  Serial.println(switch_val);
 
-  //Delcare movements
-
-
-  if (switch_voltage < 500 ) {
+  //Delcare movement
+  if (switch_val == 0) {
     pick_movement();
   } else {
     lid_servo.write(lid_pos1);
     arm_servo.write(arm_pos1);
   }
+  delay(1000); 
 }
+
 void pick_movement() {
   //slow speed = .1
   //normal speed = .5
